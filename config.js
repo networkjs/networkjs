@@ -18,6 +18,7 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "core-js": "npm:core-js@1.2.7",
     "pixi.js": "npm:pixi.js@4.3.0",
+    "rxjs": "npm:rxjs@5.0.2",
     "systemjs": "npm:systemjs@0.19.41",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
@@ -108,6 +109,11 @@ System.config({
       "eventemitter3": "npm:eventemitter3@2.0.2",
       "parse-uri": "npm:parse-uri@1.0.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:rxjs@5.0.2": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "symbol-observable": "npm:symbol-observable@1.0.4"
     },
     "npm:systemjs@0.19.41": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",

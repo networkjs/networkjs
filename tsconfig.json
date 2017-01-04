@@ -1,23 +1,37 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
+        "baseUrl": ".",
         "target": "es6",
         "noImplicitAny": true,
         "sourceMap": true,
         "strictNullChecks" : true,
         "outDir": "dist/es6",
         "rootDir":"src",
-        "watch": true
-    },
-    "include": [
-        "src/**/*"
-    ],
-     "exclude": [
-        "node_modules",
-        "jspm_packages",
-        "**/*.spec.ts",
-        "backup",
-        "esdoc",
-        "typhen"
-    ]
+        "watch": true,
+        "paths": {
+            "rxjs/*": ["jspm_packages/npm/rxjs@5.0.2/*"]
+        }
+        //  ,"module": "system"
+        // ,"typeRoots": [
+        //     "jspm_packages/npm/@types"
+        //     ,"jspm_packages/npm/rxjs@5.0.2"
+        //  ]
+    }
+
+    // ",include": [
+    //       "src/**/*"
+    //  ]
+    //  ,"files": [
+    //      "jspm_packages/npm/rxjs@5.0.2/Rx.d.ts"
+    //  ]
+    // ,
+    //  "exclude": [
+    //     "node_modules",
+    //     "jspm_packages",
+    //     "**/*.spec.ts",
+    //     "backup",
+    //     "esdoc",
+    //     "typhen"
+    // ]
 }

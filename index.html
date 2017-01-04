@@ -6,7 +6,8 @@
     <script src="config.js"></script>
     <script>
         System.import('pixi.js');
-        System.import('dist/es6/main/Graph').then((Network) => {
+        System.import('rxjs');
+        System.import('dist/es6/main/Networkjs').then((N) => {
 
             var createSimpleData = function () {
                 // let nodeA = new Vertex('1', 'Node A', 50, 50);
@@ -42,9 +43,11 @@
 
             
             let data = createSimpleData();
-            let graph = new Network.Graph(data);
-
+            let graph = new N.Networkjs(data);
+            graph.start();
+            
         });
+
     </script>
 
 </head>

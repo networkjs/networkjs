@@ -9,7 +9,8 @@
   },
   "jspm": {
     "dependencies": {
-      "pixi.js": "npm:pixi.js@^4.3.0"
+      "pixi.js": "npm:pixi.js@^4.3.0",
+      "rxjs": "npm:rxjs@^5.0.2"
     },
     "devDependencies": {
       "@types/pixi.js": "npm:@types/pixi.js@^4.3.1",

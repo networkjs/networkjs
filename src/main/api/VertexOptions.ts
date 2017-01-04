@@ -28,7 +28,7 @@ export namespace VertexOptions {
          * @type {Commons.Position}
          * @memberOf Options
          */
-        position?: Commons.Position
+        position?: Commons.Point
         /**
          * The shape options of the vertex.
          * 
