@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+
+<head>
+    <script src="jspm_packages/system.js"></script>
+    <script src="config.js"></script>
+    <script>
+        System.import('pixi.js');
+        System.import('dist/es6/main/Graph').then((Network) => {
+
+            var createSimpleData = function () {
+                // let nodeA = new Vertex('1', 'Node A', 50, 50);
+                // let nodeB = new Vertex('2', 'Node B', 100, 100);
+                // let nodeC = new Vertex('3', 'Node C', 150, 150);
+
+                let nodeA = { id: '1', label: 'Node A' };
+                let nodeB = {
+                    id: '2', label: 'Node B',
+                    shapeOptions: {
+                        type: 'ellipse',
+                        options: {
+                            width: 40,
+                            height: 15,
+                            onOver: true
+                        }
+                    }
+                };
+                let nodeC = { id: '3', label: 'Node C' };
+
+                let edge1 = { from: '1', to: '2' };
+                let edge2 = { from: '2', to: '3' };
+
+                let opts = {
+                    width: 500,
+                    height: 500,
+                    vertices: [nodeA, nodeB, nodeC],
+                    edges: [edge1, edge2]
+                };
+
+                return opts
+            };
+
+            
+            let data = createSimpleData();
+            let graph = new Network.Graph(data);
+
+        });
+    </script>
+
+</head>
+
+<body>
+    <div id="graph" style="height:500px;width:500px;border:1px solid gray"></div>
+</body>
+
+</html>
