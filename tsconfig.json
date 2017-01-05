@@ -5,20 +5,21 @@
         "target": "es6",
         "noImplicitAny": true,
         "sourceMap": true,
-        "strictNullChecks" : true,
+        "strictNullChecks": true,
         "outDir": "dist/es6",
-        "rootDir":"src",
+        "rootDir": "src",
         "watch": true,
         "paths": {
-            "rxjs/*": ["jspm_packages/npm/rxjs@5.0.2/*"]
+            "rxjs/*": [
+                "jspm_packages/npm/rxjs@5.0.2/*"
+            ]
         }
         //  ,"module": "system"
-        // ,"typeRoots": [
-        //     "jspm_packages/npm/@types"
-        //     ,"jspm_packages/npm/rxjs@5.0.2"
-        //  ]
+        ,
+        "typeRoots": [
+            "./jspm_packages/npm/@types"
+        ]
     }
-
     // ",include": [
     //       "src/**/*"
     //  ]

@@ -1,4 +1,4 @@
-import * as Commons from "./Commons"
+import * as Commons from "../core/Commons"
 
 export namespace VertexOptions {
     /**
@@ -30,6 +30,13 @@ export namespace VertexOptions {
          */
         position?: Commons.Point
         /**
+         * The rotation of the vertex.
+         * 
+         * @type {number}
+         * @memberOf Options
+         */
+        rotation?: number
+        /**
          * The shape options of the vertex.
          * 
          * @type {ShapeOptions}
@@ -45,10 +52,13 @@ export namespace VertexOptions {
         textOptions?: TextOptions
     }
 
-    /*
-        Helper array with default types of shape supported for vertices.
-     */
-    export const shapeTypes = ['circle', 'rectangle', 'ellipse'];
+
+    export enum ShapeType {
+        CIRCLE,
+        RECTANGLE,
+        ELLIPSE,
+        TRIANGLE
+    }
 
     /**
      * Options to specify the shape of the vertex.
@@ -63,7 +73,7 @@ export namespace VertexOptions {
          * @type {string}
          * @memberOf ShapeOptions
          */
-        type: string
+        type: string | ShapeType
         /**
          * The assoicated options for the given shape.
          * 

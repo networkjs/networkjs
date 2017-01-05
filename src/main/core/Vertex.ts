@@ -1,41 +1,43 @@
-import * as Commons from "../api/Commons"
+import * as Commons from "./Commons"
 import { VertexOptions } from "../api/VertexOptions"
 import { EventFactory } from "./event/EventFactory"
-import { defaultCenterEvaluator } from "./DefaultCenterEvaluator"
 import * as Rx from "rxjs/Rx"
+
+function createDefaultVertex(vertexId: string) {
+    return {
+        id: `Vertex ${vertexId}`,
+        label: `Label for Vertex ${vertexId}`,
+        position: { x: 0, y: 0 }, //center
+        shapeOptions: {
+            type: VertexOptions.ShapeType.CIRCLE,
+            options: {
+                backgroundAlpha: 1,
+                backgroundColor: 0xccf5ff,
+                borderWidth: 2,
+                borderAlpha: 0.8,
+                borderColor: 0x00b5e2,
+                radius: 20
+            }
+        },
+        textOptions: {}
+    };
+}
 
 export class Vertex {
     private _options: VertexOptions.Options
-    private static _count: number
-    private _subject: Rx.Subject<any>
-    private _centerEvaluator : (shapeOption: VertexOptions.Options) => Commons.Point
+    private static _count: number = 0;
+    private _subject: Rx.Subject<any> = new Rx.ReplaySubject(2); //number of event trigger in constructor
 
-    constructor(vertexOptions?: VertexOptions.Options, 
-        centerEvaluator?: (shapeOption: VertexOptions.Options) => Commons.Point) {
-        this._options = Object.assign(this.createDefaultVertex(), {} || vertexOptions);
-        this._subject = new Rx.Subject();
-        this._centerEvaluator = centerEvaluator || defaultCenterEvaluator;
+    constructor(vertexOptions?: VertexOptions.Options) {
+        let defOpt = createDefaultVertex(`${Vertex._count}`);
+        this._options = Object.assign({} || vertexOptions, defOpt);
         Vertex._count++;
+        this.move(this._options.position || { x: 0, y: 0 });
+        this.rotate(this._options.rotation || 0);
     }
 
-    private createDefaultVertex(): VertexOptions.Options {
-        return {
-            id: `Vertex ${Vertex._count}`,
-            label: `Label for Vertex ${Vertex._count}`,
-            position: { x: 0, y: 0 },
-            shapeOptions: {
-                type: 'circle',
-                options: {
-                    backgroundAlpha: 1,
-                    backgroundColor: 0xccf5ff,
-                    borderWidth: 2,
-                    borderAlpha: 0.8,
-                    borderColor: 0x00b5e2,
-                    radius: 20
-                }
-            },
-            textOptions: {}
-        };
+    public getOptions(): VertexOptions.Options {
+        return this._options;
     }
 
     /**
@@ -49,24 +51,33 @@ export class Vertex {
         this._subject.next(EventFactory.createVertexRenderEvent(this));
     }
 
+    public draw(): void {
+        this._subject.next(EventFactory.createVertexDrawEvent(this));
+    }
+
     public move(position: Commons.Point): void {
-        this._subject.next(EventFactory.createVertexMoveEvent(position, this));
+        if (this._options.shapeOptions === undefined)
+            throw new Error('shapeOptions should not be undefined');
+        this._options.shapeOptions.options.position = position;
+        this._subject.next(EventFactory.createVertexMoveEvent(this));
     }
 
-    public getCenter(): Commons.Point {
-        if (!this._options)
-            throw new Error(`Vertex options are not defined`);
-        
-        return this._centerEvaluator.call(this, this._options);
-        //return this._centerEvaluator.apply(this, this._options.shapeOptions);
+    public rotate(rotation: number): void {
+        if (this._options.shapeOptions === undefined)
+            throw new Error('shapeOptions should not be undefined');
+        this._options.shapeOptions.options.rotation = rotation;
+        this._subject.next(EventFactory.createVertexRotateEvent(this));
     }
 
-    public subscribe(observer: Rx.Observer<any>) {
-        this._subject.subscribe(observer);
+    public registerObserver(observer: Rx.Observer<any>): Rx.Subscription {
+        return this._subject.subscribe(observer);
     }
 
     public destroy(): void {
         this._subject.complete();
+        console.debug('Vertex sent the complete event');
+        this._subject.unsubscribe();
+        console.debug('Vertex unsubscribe its subject');
     }
 
 }
