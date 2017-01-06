@@ -17,15 +17,28 @@
                 // let nodeB = new Vertex('2', 'Node B', 100, 100);
                 // let nodeC = new Vertex('3', 'Node C', 150, 150);
 
-                let nodeA = { id: '1', label: 'Node A' ,
+                let nodeA = {
+                    id: '1',
+                    label: 'Node A',
+                    position: {
+                        x: 100,
+                        y: 100
+                    },
                     shapeOptions: {
                         type: 'circle',
                         options: {
                             radius: 50
                         }
-                    }};
+                    }
+                };
+
                 let nodeB = {
-                    id: '2', label: 'Node B',
+                    id: '2',
+                    label: 'Node B',
+                    position: {
+                        x: 50,
+                        y: 50
+                    },
                     shapeOptions: {
                         type: 'ellipse',
                         options: {
@@ -34,6 +47,7 @@
                         }
                     }
                 };
+
                 let nodeC = { id: '3', label: 'Node C' };
 
                 let edge1 = { from: '1', to: '2' };
@@ -42,6 +56,7 @@
                 let opts = {
                     width: 500,
                     height: 500,
+                    container: '#graph',
                     vertices: [nodeA, nodeB, nodeC],
                     edges: [edge1, edge2]
                 };
@@ -49,11 +64,64 @@
                 return opts
             };
 
-            
-            let data = createSimpleData();
+            var createData = function () {
+                let width = 500;
+                let height = 500;
+
+                let opts = {
+                    width: width,
+                    height: height,
+                    container: '#graph',
+                    vertices: [],
+                    edges: []
+                }
+
+                let i;
+                const N = 50;
+                const E = 75;
+
+                for (i = 0; i < N; i += 1) {
+                    let radius = 10
+                    opts.vertices.push(
+                        {
+                            id: `n${i}`,
+                            label: `Node ${i}`,
+                            position: {
+                                x: Math.max(radius, (Math.min(Math.random() * width, width - radius))),
+                                y: Math.max(radius, (Math.min(Math.random() * height, height - radius)))
+                                // x: i * (width / (N-1)),
+                                // y: i * (height / (N-1))
+                            },
+                            shapeOptions: {
+                                type: 'triangle',
+                                options: {
+                                    width: radius * 2,
+                                    height: radius * 2,
+                                    radius: 0
+                                }
+                            }
+                        }
+                    );
+                }
+                for (i = 0; i < E; i += 1) {
+                    opts.edges.push(
+                        {
+                            from: `${opts.vertices[Math.random() * N | 0].id}`,
+                            to: `${opts.vertices[Math.random() * N | 0].id}`,
+                            
+                        }
+                    );
+                }
+
+                console.log('data computed');
+
+                return opts;
+            };
+
+
+            let data = createData();
             let graph = new N.Networkjs(data);
-            graph.start();
-            
+
         });
 
     </script>

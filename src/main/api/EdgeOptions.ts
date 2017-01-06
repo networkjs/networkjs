@@ -31,11 +31,15 @@ export namespace EdgeOptions {
     }
 
 
-    /*
-        Helper array with default types of shape supported for edges.
+    /**
+     * Enum with default edge types.
+     * 
+     * @export
+     * @enum {number}
      */
-    export const shapeTypes = ['line'];
-
+    export enum ShapeType {
+        LINE
+    }
     /**
      * Options to specify the shape of the edge.
      * 

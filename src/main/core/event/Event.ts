@@ -5,13 +5,15 @@ export interface Event<T> {
 }
 
 export enum EventName {
-    VERTEX_RENDER,
     VERTEX_MOVE,
     VERTEX_DRAW,
     VERTEX_ROTATE,
+    EDGE_DRAW,
     LAYER_CHILD_ADDED,
     LAYER_CHILD_REMOVED,
-    RENDERER_RENDER
+    RENDERER_RENDER,
+    MODEL_VERTEX_CREATED,
+    MODEL_EDGE_CREATED
 }
 
 export function getSource<T>(event: Event<T>): T {

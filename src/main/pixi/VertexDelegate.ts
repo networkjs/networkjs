@@ -13,13 +13,15 @@ import * as Rx from "rxjs/Rx"
 
 export class VertexDelegate implements HasDisplayObject {
     private _subscription: Rx.Subscription
-    private _displayObject: PIXI.DisplayObject
-    //private _renderer: PIXI.WebGLRenderer
+    private _displayObject: PIXI.Container
 
-    constructor(shapeType: VertexOptions.ShapeType | string,
-        customDisplayObjectFactory?: (options: VertexOptions.Options) => PIXI.DisplayObject) {
-        let doFactory = customDisplayObjectFactory || vertexDisplayObjectFactory;
-        this._displayObject = doFactory.call(this, shapeType);
+    constructor(
+        //shapeType: VertexOptions.ShapeType | string
+        //,customDisplayObjectFactory?: (options: VertexOptions.Options) => PIXI.DisplayObject
+        ) {
+        // let doFactory = customDisplayObjectFactory || vertexDisplayObjectFactory;
+        // this._displayObject = doFactory.call(this, shapeType);
+        this._displayObject = new PIXI.Container();
     }
 
     public next(event: Event<Vertex>): void {
@@ -28,40 +30,35 @@ export class VertexDelegate implements HasDisplayObject {
         switch (event.name) {
             case EventName.VERTEX_MOVE:
                 console.debug(`VERTEX_MOVE received`);
-                this._move(event);
+                this._onMove(event);
                 break;
             case EventName.VERTEX_ROTATE:
                 console.debug(`VERTEX_ROTATE received`);
-                this._rotate(event);
-                break;
-            case EventName.VERTEX_RENDER:
-                console.debug(`VERTEX_RENDER received`);
-                this._render(event);
+                this._onRotate(event);
                 break;
             case EventName.VERTEX_DRAW:
                 console.debug(`VERTEX_DRAW received`);
-                this._draw(event);
+                this._onDraw(event);
                 break;
         }
     }
 
-
-    private _move(event: Event<Vertex>) {
-        let options = getSource(event).getOptions();
-        let pos = options.position || { x: 0, y: 0 };
+    private _onMove(event: Event<Vertex>) {
+        let vertex: Vertex = getSource(event) 
+        let pos = vertex.getPosition();
         this._displayObject.position = new PIXI.Point(pos.x, pos.y);
     }
 
-    private _rotate(event: Event<Vertex>) {
-        let options = getSource(event).getOptions();
-        let rotation = options.rotation || 0;
+    private _onRotate(event: Event<Vertex>) {
+        let vertex: Vertex = getSource(event)
+        let rotation = vertex.getRotation();
         this._displayObject.rotation += rotation;
     }
 
-    private _draw(event: Event<Vertex>) {
+    private _onDraw(event: Event<Vertex>) {
         let vertex: Vertex = getSource(event)
         let so = this._getShapeOptions(vertex);
-        let drawer = DRAW.DrawersRegistry.getInstance().getDrawer(so.type);
+        let drawer = DRAW.VertexDrawerRegistry.getInstance().getDrawer(so.type);
         if (!drawer)
             throw new Error(`Could not find corresponding drawer for shapetype;${so.type}`);
 
@@ -73,9 +70,6 @@ export class VertexDelegate implements HasDisplayObject {
         if (options.shapeOptions === undefined)
             throw new Error('shapeOptions is undefined');
         return options.shapeOptions;
-    }
-
-    private _render(event: Event<Vertex>) {
     }
 
     public complete(): void {

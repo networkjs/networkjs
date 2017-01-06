@@ -1,5 +1,6 @@
-import * as Commons from "./Commons"
 import { VertexOptions } from "../api/VertexOptions"
+
+import * as Commons from "./Commons"
 import { EventFactory } from "./event/EventFactory"
 import { AbstractHasSubject } from "./AbstractHasSubject"
 import { IsRenderable } from "./IsRenderable"
@@ -36,45 +37,48 @@ export class Vertex extends AbstractHasSubject implements IsRenderable {
         let defOpt = _createDefaultVertex(`${Vertex._count}`);
         //use lodash merge as assign is copying reference of sub objects
         this._options = _.merge(defOpt, vertexOptions);
-        this.move(this._options.position || { x: 0, y: 0 });
-        this.rotate(this._options.rotation || 0);
+        // this.move(this._options.position || { x: 0, y: 0 });
+        // this.rotate(this._options.rotation || 0);
         Vertex._count++;
     }
 
     protected _createSubject(): Rx.Subject<any> {
-        return new Rx.ReplaySubject(2);
+        return new Rx.Subject();
     }
 
     public getOptions(): VertexOptions.Options {
         return this._options;
     }
 
-    /**
-     * Render the vertex to screen using a delegate function.
-     * 
-     * @param {(vertexOptions : VertexOptions.Options) => void} fn
-     * 
-     * @memberOf Vertex
-     */
-    public render(): void {
-        this._subject.next(EventFactory.createVertexRenderEvent(this));
-    }
-
     public draw(): void {
         this._subject.next(EventFactory.createVertexDrawEvent(this));
     }
 
+    public getId(): string {
+        return this._options.id;
+    }
+
+    //copy to be sure the move event will be send using move method
+    public getPosition(): Commons.Point {
+        let cloned = _.clone(this._options.position);
+        if (cloned === undefined)
+            throw new Error('Could not clone undefined position');
+        return cloned;
+    }
+
+    public getRotation(): number {
+        if (this._options.rotation === undefined)
+            throw new Error('Could not clone undefined position');
+        return this._options.rotation;
+    }
+
     public move(position: Commons.Point): void {
-        if (this._options.shapeOptions === undefined)
-            throw new Error('shapeOptions should not be undefined');
-        this._options.shapeOptions.options.position = position;
+        this._options.position = position;
         this._subject.next(EventFactory.createVertexMoveEvent(this));
     }
 
     public rotate(rotation: number): void {
-        if (this._options.shapeOptions === undefined)
-            throw new Error('shapeOptions should not be undefined');
-        this._options.shapeOptions.options.rotation = rotation;
+        this._options.rotation = rotation;
         this._subject.next(EventFactory.createVertexRotateEvent(this));
     }
 }

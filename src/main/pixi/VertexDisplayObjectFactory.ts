@@ -3,12 +3,12 @@ import * as Commons from "../core/Commons"
 
 export function vertexDisplayObjectFactory(shapeType: VertexOptions.ShapeType | string): PIXI.DisplayObject {
 
-    switch (Commons.getAsString(shapeType)) {
-        case Commons.getAsString(VertexOptions.ShapeType.CIRCLE):
-        case Commons.getAsString(VertexOptions.ShapeType.RECTANGLE):
-        case Commons.getAsString(VertexOptions.ShapeType.ELLIPSE):
-        case Commons.getAsString(VertexOptions.ShapeType.TRIANGLE):
+    switch (Commons.getVertexShapeAsString(shapeType)) {
+        case Commons.getVertexShapeAsString(VertexOptions.ShapeType.CIRCLE):
+        case Commons.getVertexShapeAsString(VertexOptions.ShapeType.RECTANGLE):
+        case Commons.getVertexShapeAsString(VertexOptions.ShapeType.ELLIPSE):
+        case Commons.getVertexShapeAsString(VertexOptions.ShapeType.TRIANGLE):
         default:
-            return new PIXI.Graphics();
+            return new PIXI.Container();
     }
 }

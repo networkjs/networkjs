@@ -23,6 +23,14 @@ export interface GraphOptions {
    * @memberOf GraphOptions
    */
   height?: number,
+
+  /**
+   * The container selector for the graph (ex : '#container'.)
+   * 
+   * @type {string}
+   * @memberOf GraphOptions
+   */
+  container:string,
   
   /**
    * An array of vertices (nodes).

@@ -53,6 +53,12 @@ export namespace VertexOptions {
     }
 
 
+    /**
+     * Enum with default vertex types.
+     * 
+     * @export
+     * @enum {number}
+     */
     export enum ShapeType {
         CIRCLE,
         RECTANGLE,

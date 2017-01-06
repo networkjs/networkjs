@@ -35,6 +35,7 @@ export class LayerDelegate implements HasDisplayObject {
 
     private _childRemoved(event: Event<Layer<any>>) {
         let child = event.data.child;
+        //cast to any to avoid compilation issue with getDisplayObject, thx Js
         let childDelegate:any = this._registry.getDelegate(child);
         this._container.removeChild(childDelegate.getDisplayObject());
     }

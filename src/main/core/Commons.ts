@@ -1,4 +1,6 @@
 import { VertexOptions } from "../api/VertexOptions"
+import { EdgeOptions } from "../api/EdgeOptions"
+
 
 export interface Point {
     x: number
@@ -20,11 +22,20 @@ export interface HasHeight {
 export interface HasWidthAndHeight extends HasWidth, HasHeight {
 }
 
-export function getAsString(shape: VertexOptions.ShapeType | string): string {
+export function getVertexShapeAsString(shape: VertexOptions.ShapeType | string): string {
     if (typeof (shape) === 'string')
         return shape as string;
     else {
         let s = shape as VertexOptions.ShapeType;
         return VertexOptions.ShapeType[shape].toLowerCase()
+    }
+}
+
+export function getEdgeShapeAsString(shape: EdgeOptions.ShapeType | string): string {
+    if (typeof (shape) === 'string')
+        return shape as string;
+    else {
+        let s = shape as EdgeOptions.ShapeType;
+        return EdgeOptions.ShapeType[shape].toLowerCase()
     }
 }

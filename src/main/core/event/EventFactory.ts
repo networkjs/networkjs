@@ -1,8 +1,11 @@
 import { Vertex } from "../Vertex"
+import { Edge } from "../Edge"
 import { Point } from "../Commons"
 import { Layer } from "../Layer"
 import { Renderer } from "../Renderer"
 import { IsRenderable } from "../IsRenderable"
+import { Model } from "../Model"
+
 
 import { Event, EventName } from "./Event"
 
@@ -26,9 +29,21 @@ export class EventFactory {
             return this;
         };
 
-        builder.prototype.withRenderable = function withRenderable(renderable: IsRenderable) {
+        builder.prototype.withRenderable = function (renderable: IsRenderable) {
             this.data = {} || this.data;
             this.data.renderable = renderable;
+            return this;
+        };
+
+        builder.prototype.withVertex = function (vertex: Vertex) {
+            this.data = {} || this.data;
+            this.data.vertex = vertex;
+            return this;
+        };
+
+        builder.prototype.withEdge = function (edge: Edge) {
+            this.data = {} || this.data;
+            this.data.edge = edge;
             return this;
         };
 
@@ -60,14 +75,14 @@ export class EventFactory {
             .build();
     }
 
-    public static createVertexRenderEvent(source: Vertex): Event<Vertex> {
-        return this.create(EventName.VERTEX_RENDER)
+    public static createVertexDrawEvent(source: Vertex): Event<Vertex> {
+        return this.create(EventName.VERTEX_DRAW)
             .withSource(source)
             .build();
     }
 
-    public static createVertexDrawEvent(source: Vertex): Event<Vertex> {
-        return this.create(EventName.VERTEX_DRAW)
+    public static createEdgeDrawEvent(source: Edge): Event<Edge> {
+        return this.create(EventName.EDGE_DRAW)
             .withSource(source)
             .build();
     }
@@ -96,6 +111,20 @@ export class EventFactory {
         return this.create(EventName.RENDERER_RENDER)
             .withSource(source)
             .withRenderable(renderable)
+            .build();
+    }
+
+    public static createModelVertexCreatedEvent(source: Model, vertex: Vertex): Event<Model> {
+        return this.create(EventName.MODEL_VERTEX_CREATED)
+            .withSource(source)
+            .withVertex(vertex)
+            .build();
+    }
+
+    public static createModelEdgeCreatedEvent(source: Model, edge: Edge): Event<Model> {
+        return this.create(EventName.MODEL_EDGE_CREATED)
+            .withSource(source)
+            .withEdge(edge)
             .build();
     }
 
