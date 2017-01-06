@@ -6,7 +6,7 @@ import { Vertex } from "../core/Vertex"
 export class DrawersRegistry {
 
     private static _instance: DrawersRegistry = new DrawersRegistry();
-    private _drawers: Map<string, (vertex: Vertex, container: PIXI.DisplayObject) => void> = new Map();
+    private _drawers: Map<string, (vertexOptions: VertexOptions.Options, container: PIXI.DisplayObject) => void> = new Map();
 
     constructor() {
         if (DrawersRegistry._instance) {
@@ -20,49 +20,38 @@ export class DrawersRegistry {
     }
 
     public registerDrawer(shape: VertexOptions.ShapeType | string,
-        fn: (vertex: Vertex, container: PIXI.DisplayObject) => void) {
-        this._drawers.set(this._getAsString(shape), fn);
+        fn: (vertexOptions: VertexOptions.Options, container: PIXI.DisplayObject) => void) {
+        this._drawers.set(Commons.getAsString(shape), fn);
     }
 
     public getDrawer(shape: VertexOptions.ShapeType | string) {
-        return this._drawers.get(this._getAsString(shape));
-    }
-
-    private _getAsString(shape: VertexOptions.ShapeType | string): string {
-        if (typeof (shape) === 'string')
-            return shape as string;
-        else {
-            let s = shape as VertexOptions.ShapeType;
-            return VertexOptions.ShapeType[shape].toLowerCase()
-        }
+        return this._drawers.get(Commons.getAsString(shape));
     }
 }
 
 
-export function circleDrawer(vertex: Vertex, graphics: PIXI.Graphics) {
-    let vo = vertex.getOptions();
-    if (vo.shapeOptions == undefined)
+export function circleDrawer(vertexOptions: VertexOptions.Options, graphics: PIXI.Graphics) {
+    if (vertexOptions.shapeOptions == undefined)
         throw new Error('Cannot draw circle, shapeOptions undefined');
-    if (vo.position == undefined)
+    if (vertexOptions.position == undefined)
         throw new Error('Cannot draw circle, position undefined');
 
-    let so = vo.shapeOptions.options;
-    initGraphics(vo.position, vertex, so, graphics);
+    let so = vertexOptions.shapeOptions.options;
+    initGraphics(vertexOptions.position, so, graphics);
 
-    graphics.drawCircle(vo.position.x, vo.position.y, so.radius);
+    graphics.drawCircle(vertexOptions.position.x, vertexOptions.position.y, so.radius);
 
-    _endg(vo, graphics);
+    _endg(vertexOptions, graphics);
 };
 
-export function rectangleDrawer(vertex: Vertex, graphics: PIXI.Graphics) {
-    let vo = vertex.getOptions();
-    if (vo.shapeOptions == undefined)
+export function rectangleDrawer(vertexOptions: VertexOptions.Options, graphics: PIXI.Graphics) {
+    if (vertexOptions.shapeOptions == undefined)
         throw new Error('Cannot draw circle, shapeOptions undefined');
-    if (vo.position == undefined)
+    if (vertexOptions.position == undefined)
         throw new Error('Cannot draw circle, position undefined');
 
-    let so = vo.shapeOptions.options;
-    initGraphics(vo.position, vertex, so, graphics);
+    let so = vertexOptions.shapeOptions.options;
+    initGraphics(vertexOptions.position, so, graphics);
 
     let radius = so.radius;
     if (radius) {
@@ -81,43 +70,41 @@ export function rectangleDrawer(vertex: Vertex, graphics: PIXI.Graphics) {
             so.height);
     }
 
-    _endg(vo, graphics);
+    _endg(vertexOptions, graphics);
 };
 
-export function ellipseDrawer(vertex: Vertex, graphics: PIXI.Graphics) {
-    let vo = vertex.getOptions();
-    if (vo.shapeOptions == undefined)
+export function ellipseDrawer(vertexOptions: VertexOptions.Options, graphics: PIXI.Graphics) {
+    if (vertexOptions.shapeOptions == undefined)
         throw new Error('Cannot draw circle, shapeOptions undefined');
-    if (vo.position == undefined)
+    if (vertexOptions.position == undefined)
         throw new Error('Cannot draw circle, position undefined');
 
-    let so = vo.shapeOptions.options;
-    initGraphics(vo.position, vertex, so, graphics);
+    let so = vertexOptions.shapeOptions.options;
+    initGraphics(vertexOptions.position, so, graphics);
 
     graphics.drawEllipse(
-        vo.position.x,
-        vo.position.y,
+        vertexOptions.position.x,
+        vertexOptions.position.y,
         so.width / 2,
         so.height / 2);
 
-    _endg(vo, graphics);
+    _endg(vertexOptions, graphics);
 };
 
 //TODO change the method this is not the correct center 
-export function triangleDrawer(vertex: Vertex, graphics: PIXI.Graphics) {
-    let vo = vertex.getOptions();
-    if (vo.shapeOptions == undefined)
+export function triangleDrawer(vertexOptions: VertexOptions.Options, graphics: PIXI.Graphics) {
+    if (vertexOptions.shapeOptions == undefined)
         throw new Error('Cannot draw circle, shapeOptions undefined');
-    if (vo.position == undefined)
+    if (vertexOptions.position == undefined)
         throw new Error('Cannot draw circle, position undefined');
 
-    let so = vo.shapeOptions.options;
-    initGraphics(vo.position, vertex, so, graphics);
+    let so = vertexOptions.shapeOptions.options;
+    initGraphics(vertexOptions.position, so, graphics);
 
     let center = computeCenterTriangle(so.width, so.height);
 
-    let dx = vo.position.x - center.x;
-    let dy = vo.position.y - center.y;
+    let dx = vertexOptions.position.x - center.x;
+    let dy = vertexOptions.position.y - center.y;
 
     let a: Commons.Point = { x: dx + so.width / 2, y: dy + 0 };
     let b: Commons.Point = { x: a.x + so.width / 2, y: a.y + so.height };
@@ -128,7 +115,7 @@ export function triangleDrawer(vertex: Vertex, graphics: PIXI.Graphics) {
     graphics.lineTo(c.x, c.y);
     graphics.lineTo(a.x, a.y);
 
-    _endg(vo, graphics);
+    _endg(vertexOptions, graphics);
 };
 
 function computeCenterTriangle(width: number, height: number): Commons.Point {
@@ -160,7 +147,7 @@ function computeCenterTriangle(width: number, height: number): Commons.Point {
 }
 
 
-function initGraphics(position: Commons.Point, vertex: Vertex, shapeOptions: any, graphics: PIXI.Graphics) {
+function initGraphics(position: Commons.Point, shapeOptions: any, graphics: PIXI.Graphics) {
     //Set the center of the graphics in order to rotate around the center
     graphics.position = new PIXI.Point(position.x, position.y);
 

@@ -13,12 +13,16 @@
             "rxjs/*": [
                 "jspm_packages/npm/rxjs@5.0.2/*"
             ]
+            // ,"lodash@4.14.45":[
+            //     "jspm_packages/npm/lodash@4.14.45/index.d.ts"
+            // ]
         }
         //  ,"module": "system"
         ,
         "typeRoots": [
-            "./jspm_packages/npm/@types"
+            "jspm_packages/npm/@types"
         ]
+        // ,"types" : ["lodash@4.14.45", "pixi.js@4.3.1"]
     }
     // ",include": [
     //       "src/**/*"

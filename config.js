@@ -13,10 +13,12 @@ System.config({
   },
 
   map: {
+    "@types/lodash": "npm:@types/lodash@4.14.45",
     "@types/pixi.js": "npm:@types/pixi.js@4.3.1",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "core-js": "npm:core-js@1.2.7",
+    "lodash": "npm:lodash@4.17.4",
     "pixi.js": "npm:pixi.js@4.3.0",
     "rxjs": "npm:rxjs@5.0.2",
     "systemjs": "npm:systemjs@0.19.41",

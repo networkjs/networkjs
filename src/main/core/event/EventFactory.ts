@@ -1,7 +1,11 @@
-import { Event, EventName } from "./Event"
-import { Point } from "../../core/Commons"
-import { Layer } from "../../core/Layer"
 import { Vertex } from "../Vertex"
+import { Point } from "../Commons"
+import { Layer } from "../Layer"
+import { Renderer } from "../Renderer"
+import { IsRenderable } from "../IsRenderable"
+
+import { Event, EventName } from "./Event"
+
 
 export class EventFactory {
 
@@ -22,6 +26,12 @@ export class EventFactory {
             return this;
         };
 
+        builder.prototype.withRenderable = function withRenderable(renderable: IsRenderable) {
+            this.data = {} || this.data;
+            this.data.renderable = renderable;
+            return this;
+        };
+
         // builder.prototype.withPosition = function (position: Point) {
         //     this.data = {} || this.data;
         //     this.data.position = position;
@@ -36,6 +46,7 @@ export class EventFactory {
 
 
         builder.prototype.build = function () {
+            //Remove builder prototype methods from event 
             return Object.assign({}, this);
         };
 
@@ -81,5 +92,11 @@ export class EventFactory {
             .build();
     }
 
+    public static createRendererRenderEvent(source: Renderer, renderable: any): Event<Renderer> {
+        return this.create(EventName.RENDERER_RENDER)
+            .withSource(source)
+            .withRenderable(renderable)
+            .build();
+    }
 
 }

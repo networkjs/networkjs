@@ -7,6 +7,9 @@
     <script>
         System.import('pixi.js');
         System.import('rxjs');
+        System.import('lodash').then((lodash) => {
+            window._ = lodash;
+        });
         System.import('dist/es6/main/Networkjs').then((N) => {
 
             var createSimpleData = function () {
@@ -14,15 +17,20 @@
                 // let nodeB = new Vertex('2', 'Node B', 100, 100);
                 // let nodeC = new Vertex('3', 'Node C', 150, 150);
 
-                let nodeA = { id: '1', label: 'Node A' };
+                let nodeA = { id: '1', label: 'Node A' ,
+                    shapeOptions: {
+                        type: 'circle',
+                        options: {
+                            radius: 50
+                        }
+                    }};
                 let nodeB = {
                     id: '2', label: 'Node B',
                     shapeOptions: {
                         type: 'ellipse',
                         options: {
                             width: 40,
-                            height: 15,
-                            onOver: true
+                            height: 15
                         }
                     }
                 };
