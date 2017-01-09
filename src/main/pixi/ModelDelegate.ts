@@ -32,7 +32,7 @@ export class ModelDelegate {
 
     private _onVertexCreated(event: Event<Model>) {
         let vertex: Vertex = event.data.vertex;
-        let delegate = new VertexDelegate();
+        let delegate = new VertexDelegate(vertex);
         this._registry.addDelegate(vertex, delegate);
     }
 

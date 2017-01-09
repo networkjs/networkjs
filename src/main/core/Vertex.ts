@@ -1,7 +1,8 @@
 import { VertexOptions } from "../api/VertexOptions"
 
 import * as Commons from "./Commons"
-import { EventFactory } from "./event/EventFactory"
+import { EventBuilder } from "./event/EventFactory"
+import { EventName } from "./event/Event"
 import { AbstractHasSubject } from "./AbstractHasSubject"
 import { IsRenderable } from "./IsRenderable"
 
@@ -31,14 +32,14 @@ function _createDefaultVertex(vertexId: string) {
 export class Vertex extends AbstractHasSubject implements IsRenderable {
     private _options: VertexOptions.Options
     private static _count: number = 0;
+    private _dragged: boolean;
+    private _hovered: boolean;
 
     constructor(vertexOptions?: VertexOptions.Options) {
         super();
         let defOpt = _createDefaultVertex(`${Vertex._count}`);
         //use lodash merge as assign is copying reference of sub objects
         this._options = _.merge(defOpt, vertexOptions);
-        // this.move(this._options.position || { x: 0, y: 0 });
-        // this.rotate(this._options.rotation || 0);
         Vertex._count++;
     }
 
@@ -51,11 +52,19 @@ export class Vertex extends AbstractHasSubject implements IsRenderable {
     }
 
     public draw(): void {
-        this._subject.next(EventFactory.createVertexDrawEvent(this));
+        this._subject.next(EventBuilder.createEvent(EventName.VERTEX_DRAW, this).build());
     }
 
     public getId(): string {
         return this._options.id;
+    }
+
+    public isDragged(): boolean {
+        return this._dragged;
+    }
+
+    public isHovered(): boolean {
+        return this._hovered;
     }
 
     //copy to be sure the move event will be send using move method
@@ -74,11 +83,22 @@ export class Vertex extends AbstractHasSubject implements IsRenderable {
 
     public move(position: Commons.Point): void {
         this._options.position = position;
-        this._subject.next(EventFactory.createVertexMoveEvent(this));
+        this._subject.next(EventBuilder.createEvent(EventName.VERTEX_MOVE, this).withPosition(position).build());
+
     }
 
     public rotate(rotation: number): void {
         this._options.rotation = rotation;
-        this._subject.next(EventFactory.createVertexRotateEvent(this));
+        this._subject.next(EventBuilder.createEvent(EventName.VERTEX_ROTATE, this).withRotation(rotation).build());
+    }
+
+    public startDrag(delta: Commons.Point) {
+        this._dragged = true;
+        this._subject.next(EventBuilder.createEvent(EventName.VERTEX_DRAG_START, this).withPosition(delta).build());
+    }
+
+    public endDrag() {
+        this._dragged = false;
+        this._subject.next(EventBuilder.createEvent(EventName.VERTEX_DRAG_END, this).build());
     }
 }

@@ -17,23 +17,23 @@ export class LayerDelegate implements HasDisplayObject {
         switch (event.name) {
             case EventName.LAYER_CHILD_ADDED:
                 console.debug(`LAYER_CHILD_ADDED received`);
-                this._childAdded(event);
+                this._onChildAdded(event);
                 break;
             case EventName.LAYER_CHILD_REMOVED:
                 console.debug(`LAYER_CHILD_REMOVED received`);
-                this._childRemoved(event);
+                this._onChildRemoved(event);
                 break;
         }
     }
 
-    private _childAdded(event: Event<Layer<any>>) {
+    private _onChildAdded(event: Event<Layer<any>>) {
         let child = event.data.child;
         //cast to any to avoid compilation issue with getDisplayObject, thx Js
         let childDelegate:any = this._registry.getDelegate(child);
         this._container.addChild(childDelegate.getDisplayObject());
     }
 
-    private _childRemoved(event: Event<Layer<any>>) {
+    private _onChildRemoved(event: Event<Layer<any>>) {
         let child = event.data.child;
         //cast to any to avoid compilation issue with getDisplayObject, thx Js
         let childDelegate:any = this._registry.getDelegate(child);

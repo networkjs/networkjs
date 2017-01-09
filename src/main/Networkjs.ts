@@ -77,13 +77,12 @@ export class Networkjs {
         let rd: RendererDelegate = new RendererDelegate(options.width || 0 , options.height || 0, options.container);
         this._registry.addDelegate(renderer, rd);
 
-        //renderer.render(vertexLayer);
+        
+        let anim = function () {
+            requestAnimationFrame(anim);
+            renderer.render(mainLayer);
+        };
 
-        // v1.move({ x: 10, y: 20 });
-        // v1.rotate(1.5708);
-
-        //vertexLayer.removeChild(v2);
-
-        renderer.render(mainLayer);
+        anim();
     }
 }

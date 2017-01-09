@@ -27,12 +27,12 @@ export class RendererDelegate {
         switch (event.name) {
             case EventName.RENDERER_RENDER:
                 console.debug(`RENDERER_RENDER received`);
-                this._render(event);
+                this._onRender(event);
                 break;
         }
     }
 
-    private _render(event: Event<Renderer>) {
+    private _onRender(event: Event<Renderer>) {
         let renderable = event.data.renderable;
         //cast to any to avoid compilation issue with getDisplayObject, thx Js
         let delegate: any = this._registry.getDelegate(renderable);

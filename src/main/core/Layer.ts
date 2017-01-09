@@ -1,5 +1,6 @@
 import { HasChildren } from "./HasChildren"
-import { EventFactory } from "./event/EventFactory"
+import { EventBuilder } from "./event/EventFactory"
+import { EventName } from "./event/Event"
 import { AbstractHasSubject } from "./AbstractHasSubject"
 import { IsRenderable } from "./IsRenderable"
 
@@ -18,7 +19,7 @@ export class Layer<T> extends AbstractHasSubject implements HasChildren<T>, IsRe
 
     public addChild(child: T): void {
         this._children.push(child);
-        this._subject.next(EventFactory.createLayerChildAddedEvent(this, child));
+        this._subject.next(EventBuilder.createEvent(EventName.LAYER_CHILD_ADDED, this).withChild(child).build());
     }
 
     public removeChild(child: T): void {
@@ -27,7 +28,7 @@ export class Layer<T> extends AbstractHasSubject implements HasChildren<T>, IsRe
             console.warn('Child mot found in layer, child was not remove');
 
         let c = this._children.splice(i, 1);
-        this._subject.next(EventFactory.createLayerChildRemovedEvent(this, c[0]));
+        this._subject.next(EventBuilder.createEvent(EventName.LAYER_CHILD_REMOVED, this).withChild(c[0]).build());
     }
 
     public removeChildren(): void {
@@ -35,7 +36,7 @@ export class Layer<T> extends AbstractHasSubject implements HasChildren<T>, IsRe
             let child: T | undefined = this._children.pop();
             if (child === undefined) //FB
                 continue;
-            this._subject.next(EventFactory.createLayerChildRemovedEvent(this, child));
+            this._subject.next(EventBuilder.createEvent(EventName.LAYER_CHILD_REMOVED, this).withChild(child).build());
         }
     }
 

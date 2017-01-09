@@ -33,6 +33,7 @@ export class EdgeDelegate implements HasDisplayObject {
     }
 
     private _onDraw(event: Event<Edge>) {
+        this._displayObject.removeChildren();
         let edge: Edge = getSource(event)
         let so = this._getShapeOptions(edge);
         let drawer = DRAW.EdgeDrawerRegistry.getInstance().getDrawer(so.type);

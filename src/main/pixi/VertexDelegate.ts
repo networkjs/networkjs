@@ -14,14 +14,39 @@ import * as Rx from "rxjs/Rx"
 export class VertexDelegate implements HasDisplayObject {
     private _subscription: Rx.Subscription
     private _displayObject: PIXI.Container
+    private _vertex: Vertex
+    private _interactionData: PIXI.interaction.InteractionData
+    private _deltaPosition: Point
 
-    constructor(
+    constructor(vertex: Vertex
         //shapeType: VertexOptions.ShapeType | string
         //,customDisplayObjectFactory?: (options: VertexOptions.Options) => PIXI.DisplayObject
-        ) {
+    ) {
         // let doFactory = customDisplayObjectFactory || vertexDisplayObjectFactory;
         // this._displayObject = doFactory.call(this, shapeType);
         this._displayObject = new PIXI.Container();
+        this._displayObject.interactive = true;
+        this._displayObject.buttonMode = true;
+
+        this._vertex = vertex;
+
+        var v = this;
+
+        v._displayObject
+            .on('mousedown', function (event: PIXI.interaction.InteractionEvent) { v._onDragStart(event) })
+            .on('touchstart', function (event: PIXI.interaction.InteractionEvent) { v._onDragStart(event) })
+
+            .on('mouseup', function () { v._onDragEnd() })
+            .on('mouseupoutside', function () { v._onDragEnd() })
+            .on('touchend', function () { v._onDragEnd() })
+            .on('touchendoutside', function () { v._onDragEnd() })
+
+            .on('mousemove', function () { v._onDragMove() })
+            .on('touchmove', function () { v._onDragMove() })
+
+            // .on('mouseover', function () { v._onMouseOver(v) })
+            // .on('mouseout', function () { v._onMouseOut(v) })
+            ;
     }
 
     public next(event: Event<Vertex>): void {
@@ -44,25 +69,50 @@ export class VertexDelegate implements HasDisplayObject {
     }
 
     private _onMove(event: Event<Vertex>) {
-        let vertex: Vertex = getSource(event) 
-        let pos = vertex.getPosition();
+        //let vertex: Vertex = getSource(event)
+        let pos = this._vertex.getPosition();
         this._displayObject.position = new PIXI.Point(pos.x, pos.y);
     }
 
     private _onRotate(event: Event<Vertex>) {
-        let vertex: Vertex = getSource(event)
-        let rotation = vertex.getRotation();
+        //let vertex: Vertex = getSource(event)
+        let rotation = this._vertex.getRotation();
         this._displayObject.rotation += rotation;
     }
 
     private _onDraw(event: Event<Vertex>) {
-        let vertex: Vertex = getSource(event)
-        let so = this._getShapeOptions(vertex);
+        //let vertex: Vertex = getSource(event)
+        this._displayObject.removeChildren();
+        let so = this._getShapeOptions(this._vertex);
         let drawer = DRAW.VertexDrawerRegistry.getInstance().getDrawer(so.type);
         if (!drawer)
             throw new Error(`Could not find corresponding drawer for shapetype;${so.type}`);
 
-        drawer.call(this, vertex.getOptions(), this._displayObject);
+        drawer.call(this, this._vertex.getOptions(), this._displayObject);
+    }
+
+    private _onDragStart(event: PIXI.interaction.InteractionEvent) {
+        //Get mouse position on vertex graphics
+        this._interactionData = event.data;
+        let dx = this._interactionData.getLocalPosition(this._displayObject).x;
+        let dy = this._interactionData.getLocalPosition(this._displayObject).y;
+        this._deltaPosition = { x: dx, y: dy };
+
+        this._vertex.startDrag(this._deltaPosition);
+    }
+
+    private _onDragEnd() {
+        this._vertex.endDrag();
+    }
+
+    private _onDragMove() {
+        if (this._vertex.isDragged()) {
+            var newPosition = this._interactionData.getLocalPosition(this._displayObject.parent);
+            let newX = newPosition.x - this._deltaPosition.x;
+            let newY = newPosition.y - this._deltaPosition.y;
+
+            this._vertex.move({ x: newX, y: newY });
+        }
     }
 
     private _getShapeOptions(vertex: Vertex): VertexOptions.ShapeOptions {

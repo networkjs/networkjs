@@ -1,7 +1,8 @@
 import { EdgeOptions } from "../api/EdgeOptions"
 
 import * as Commons from "./Commons"
-import { EventFactory } from "./event/EventFactory"
+import { EventBuilder } from "./event/EventFactory"
+import { EventName, Event } from "./event/Event"
 import { AbstractHasSubject } from "./AbstractHasSubject"
 import { IsRenderable } from "./IsRenderable"
 
@@ -43,7 +44,7 @@ export class Edge extends AbstractHasSubject implements IsRenderable {
     }
 
     public draw(): void {
-        this._subject.next(EventFactory.createEdgeDrawEvent(this));
+        this._subject.next(EventBuilder.createEvent(EventName.EDGE_DRAW, this).build());
     }
 
     public getFromId(): string {
@@ -53,4 +54,25 @@ export class Edge extends AbstractHasSubject implements IsRenderable {
     public getToId(): string {
         return this._options.to;
     }
+
+    public next(event: Event<any>): void {
+        if (!event || event.name === undefined)
+            throw new Error('Event does not contain the name property');
+        switch (event.name) {
+            case EventName.VERTEX_MOVE: {
+                console.debug(`VERTEX_MOVE received by edge`);
+                this.draw();
+            }
+        }
+    }
+
+    public complete(): void {
+        console.debug('Edge received complete event');
+    }
+
+    public error(e: any): void {
+        throw new Error('Edge received error event' + e);
+    }
+
+
 }
