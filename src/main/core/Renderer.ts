@@ -15,10 +15,11 @@ export class Renderer extends AbstractHasSubject {
     }
 
     public render(renderable: IsRenderable): void {
-        this._subject.next(EventBuilder.createEvent(EventName.RENDERER_RENDER, this).withRenderable(renderable).build());
+        this._subject.next(EventBuilder.createEvent(EventName.RENDERER_NEXT_FRAME, this).withRenderable(renderable).build());
     }
 
      public registerObserver(observer: Rx.Observer<any>): Rx.Subscription {
-        return this._subject.throttleTime(16).subscribe(observer);
+        return this._subject.subscribe(observer); //as much as possible
+        //return this._subject.throttleTime(16).subscribe(observer); //60fps -> issues with over event flickering
     }
 }

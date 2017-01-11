@@ -60,7 +60,7 @@ export class Edge extends AbstractHasSubject implements IsRenderable {
             throw new Error('Event does not contain the name property');
         switch (event.name) {
             case EventName.VERTEX_MOVE: {
-                console.debug(`VERTEX_MOVE received by edge`);
+                //console.debug(`VERTEX_MOVE received by edge`);
                 this.draw();
             }
         }

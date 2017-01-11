@@ -25,8 +25,8 @@ export class RendererDelegate {
         if (!event || event.name === undefined)
             throw new Error('Event does not contain the name property');
         switch (event.name) {
-            case EventName.RENDERER_RENDER:
-                console.debug(`RENDERER_RENDER received`);
+            case EventName.RENDERER_NEXT_FRAME:
+                //console.debug(`RENDERER_RENDER received`);
                 this._onRender(event);
                 break;
         }

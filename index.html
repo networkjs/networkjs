@@ -13,22 +13,41 @@
         System.import('dist/es6/main/Networkjs').then((N) => {
 
             var createSimpleData = function () {
-                // let nodeA = new Vertex('1', 'Node A', 50, 50);
-                // let nodeB = new Vertex('2', 'Node B', 100, 100);
-                // let nodeC = new Vertex('3', 'Node C', 150, 150);
+
+                let shapeA = {
+                            type: 'rectangle',
+                            options: {                                
+                            }
+                        };
+                let shapeB = {
+                            type: 'ellipse',
+                            options: {
+                                
+                            }
+                        };
+                let shapeC = {
+                            type: 'triangle',
+                            options: {
+                                
+                            }
+                        };
+
 
                 let nodeA = {
                     id: '1',
                     label: 'Node A',
                     position: {
-                        x: 100,
-                        y: 100
-                    },
+                        x: 300,
+                        y: 300
+                    }
+                    ,
                     shapeOptions: {
-                        type: 'circle',
-                        options: {
-                            radius: 50
-                        }
+                        default: shapeA,
+                        overed: shapeA,
+                        dragged: shapeA,
+                        selected: shapeA,
+                        selected_over: shapeA,
+                        selected_dragged: shapeA
                     }
                 };
 
@@ -36,29 +55,57 @@
                     id: '2',
                     label: 'Node B',
                     position: {
-                        x: 50,
-                        y: 50
-                    },
+                        x: 200,
+                        y: 200
+                    }
+                    ,
                     shapeOptions: {
-                        type: 'ellipse',
-                        options: {
-                            width: 40,
-                            height: 15
-                        }
+                        default: shapeB,
+                        overed: shapeB,
+                        dragged: shapeB,
+                        selected: shapeB,
+                        selected_over: shapeB,
+                        selected_dragged: shapeB
                     }
                 };
 
-                let nodeC = { id: '3', label: 'Node C' };
+                let nodeC = {
+                    id: '3',
+                    label: 'Node c',
+                    position: {
+                        x: 100,
+                        y: 300
+                    }
+                    ,
+                    shapeOptions: {
+                        default: shapeC,
+                        overed: shapeC,
+                        dragged: shapeC,
+                        selected: shapeC,
+                        selected_over: shapeC,
+                        selected_dragged: shapeC
+                    }
+                };
+
+                let nodeD = {
+                    id: '4',
+                    label: 'Node D',
+                    position: {
+                        x: 100,
+                        y: 400
+                    }
+                };
 
                 let edge1 = { from: '1', to: '2' };
                 let edge2 = { from: '2', to: '3' };
+                let edge3 = { from: '3', to: '4' };
 
                 let opts = {
                     width: 500,
                     height: 500,
                     container: '#graph',
-                    vertices: [nodeA, nodeB, nodeC],
-                    edges: [edge1, edge2]
+                    vertices: [nodeA, nodeB, nodeC, nodeD],
+                    edges: [edge1, edge2, edge3]
                 };
 
                 return opts

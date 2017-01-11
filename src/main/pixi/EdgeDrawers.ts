@@ -47,6 +47,6 @@ export function lineDrawer(edgeOptions: EdgeOptions.Options, fromPosition: Commo
     g.lineTo(toPosition.x, toPosition.y);
     g.endFill();
     container.addChild(g);
-    console.debug('circleDrawer called');
+    //console.debug('lineDrawer called');
 };
 

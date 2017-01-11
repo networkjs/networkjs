@@ -67,6 +67,19 @@ export namespace VertexOptions {
     }
 
     /**
+     * Enum with default vertex states.
+     * 
+     * @export
+     * @enum {number}
+     */
+    export enum States {
+        DEFAULT,
+        OVERED,
+        SELECTED,
+        DRAGGED
+    }
+
+    /**
      * Options to specify the shape of the vertex.
      * 
      * @export
@@ -74,17 +87,68 @@ export namespace VertexOptions {
      */
     export interface ShapeOptions {
         /**
+         * Shape options for the default state.
+         * 
+         * @type {Shape}
+         * @memberOf ShapeOptions
+         */
+        default: Shape
+        /**
+         * Shape options for the overed state.
+         * 
+         * @type {Shape}
+         * @memberOf ShapeOptions
+         */
+        overed?: Shape
+        /**
+         * Shape options for the dragged state.
+         * 
+         * @type {Shape}
+         * @memberOf ShapeOptions
+         */
+        dragged?: Shape
+        /**
+         * Shape options for the selected state.
+         * 
+         * @type {Shape}
+         * @memberOf ShapeOptions
+         */
+        selected?: Shape
+        /**
+         * Shape options for the overed + selected state.
+         * 
+         * @type {Shape}
+         * @memberOf ShapeOptions
+         */
+        selected_overed?: Shape
+        /**
+         * Shape options for the dragged + selected state.
+         * 
+         * @type {Shape}
+         * @memberOf ShapeOptions
+         */
+        selected_dragged?: Shape
+    }
+
+    /**
+     * Options to specify the shape of the vertex.
+     * 
+     * @export
+     * @interface Shape
+     */
+    export interface Shape {
+        /**
          * The type of the shape. Example : circle.
          * 
-         * @type {string}
-         * @memberOf ShapeOptions
+         * @type {(string | ShapeType)}
+         * @memberOf Shape
          */
         type: string | ShapeType
         /**
          * The assoicated options for the given shape.
          * 
          * @type {*}
-         * @memberOf ShapeOptions
+         * @memberOf Shape
          */
         options: any
     }
@@ -93,9 +157,10 @@ export namespace VertexOptions {
     /**
      *  Options to specify the border of the Vertex when applicable
      * 
+     * @export
      * @interface HasBorder
      */
-    interface HasBorder {
+    export interface HasBorder {
         /**
          * Width of the border.
          * 
@@ -122,9 +187,10 @@ export namespace VertexOptions {
     /**
      * Options to specify the background of the Vertex when applicable.
      * 
+     * @export
      * @interface HasBackground
      */
-    interface HasBackground {
+    export interface HasBackground {
         /**
          * Transparency of the background (value between 0 and 1).
          * 
@@ -177,6 +243,19 @@ export namespace VertexOptions {
      * @extends {Commons.HasWidthAndHeight}
      */
     export interface EllipseOptions extends HasBorder, HasBackground, Commons.HasWidthAndHeight {
+    }
+
+
+    /**
+     * Options to specify the shape of a vertex as a triangle.
+     * 
+     * @export
+     * @interface TriangleOptions
+     * @extends {HasBorder}
+     * @extends {HasBackground}
+     * @extends {Commons.HasWidthAndHeight}
+     */
+    export interface TriangleOptions extends HasBorder, HasBackground, Commons.HasWidthAndHeight {
     }
 
     /**

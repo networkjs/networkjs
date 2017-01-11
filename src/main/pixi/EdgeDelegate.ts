@@ -26,7 +26,7 @@ export class EdgeDelegate implements HasDisplayObject {
             throw new Error('Event does not contain the name property');
         switch (event.name) {
             case EventName.EDGE_DRAW:
-                console.debug(`EDGE_DRAW received`);
+                //console.debug(`EDGE_DRAW received`);
                 this._onDraw(event);
                 break;
         }
